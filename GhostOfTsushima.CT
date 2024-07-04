@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="45">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>38</ID>
+      <Description>"hp"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>{
+判断rcx指针区别玩家与敌人，每次重启游戏需要找到玩家的rcx指针
+
+有时指针会变化
+}
+
+define(address,"GhostOfTsushima.exe"+68B365)
+define(bytes,F3 0F 11 89 74 19 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GhostOfTsushima.exe"+68B365)
+
+label(code)
+label(return)
+
+label(param_1)
+
+newmem:
+  pushf
+  push rax
+  mov rax, 000004623F43F000 // player rcx
+  cmp rcx,rax
+  jne @f
+  // plater
+  movss xmm1,[rcx+1970] // 最大HP
+  jmp code
+
+@@: // enemy
+  //subss xmm1,[param_1] // 攻击敌人添加附加伤害
+
+code:
+  pop rax
+  popf
+
+  movss [rcx+1974],xmm1
+  jmp return
+
+  align 10 CC
+
+param_1:
+  dd (float)20
+
+
+address:
+  jmp newmem
+  nop 3
+return:
+
+
+
+[DISABLE]
+
+address:
+  db bytes
+  // movss [rcx+00001974],xmm1
+
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GhostOfTsushima.exe+68B365
+
+GhostOfTsushima.exe+68B33D: CC                       - int 3 
+GhostOfTsushima.exe+68B33E: CC                       - int 3 
+GhostOfTsushima.exe+68B33F: CC                       - int 3 
+GhostOfTsushima.exe+68B340: 48 89 5C 24 08           - mov [rsp+08],rbx
+GhostOfTsushima.exe+68B345: 57                       - push rdi
+GhostOfTsushima.exe+68B346: 48 81 EC D0 00 00 00     - sub rsp,000000D0
+GhostOfTsushima.exe+68B34D: 48 8B D9                 - mov rbx,rcx
+GhostOfTsushima.exe+68B350: 0F 29 B4 24 C0 00 00 00  - movaps [rsp+000000C0],xmm6
+GhostOfTsushima.exe+68B358: F3 0F 10 B1 74 19 00 00  - movss xmm6,[rcx+00001974]
+GhostOfTsushima.exe+68B360: BA 75 00 00 00           - mov edx,00000075
+// ---------- INJECTING HERE ----------
+GhostOfTsushima.exe+68B365: F3 0F 11 89 74 19 00 00  - movss [rcx+00001974],xmm1
+// ---------- DONE INJECTING  ----------
+GhostOfTsushima.exe+68B36D: 48 8B 89 F8 16 00 00     - mov rcx,[rcx+000016F8]
+GhostOfTsushima.exe+68B374: 0F 2F 8B 70 19 00 00     - comiss xmm1,[rbx+00001970]
+GhostOfTsushima.exe+68B37B: 73 07                    - jae GhostOfTsushima.exe+68B384
+GhostOfTsushima.exe+68B37D: E8 9E 36 43 00           - call GhostOfTsushima.exe+ABEA20
+GhostOfTsushima.exe+68B382: EB 05                    - jmp GhostOfTsushima.exe+68B389
+GhostOfTsushima.exe+68B384: E8 D7 57 43 00           - call GhostOfTsushima.exe+AC0B60
+GhostOfTsushima.exe+68B389: 48 8D 4C 24 30           - lea rcx,[rsp+30]
+GhostOfTsushima.exe+68B38E: E8 8D ED EC FF           - call GhostOfTsushima.exe+55A120
+GhostOfTsushima.exe+68B393: 41 B8 0E 00 00 00        - mov r8d,0000000E
+GhostOfTsushima.exe+68B399: 48 8D 4C 24 30           - lea rcx,[rsp+30]
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>39</ID>
+      <Description>"消耗品"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>define(address,"GhostOfTsushima.exe"+520C41)
+define(bytes,89 74 38 08 80 BB 18 13 09 00 00)
+
+[ENABLE]
+
+assert(address,bytes)
+alloc(newmem,$1000,"GhostOfTsushima.exe"+520C41)
+
+label(code)
+label(return)
+
+newmem:
+  mov esi,(int)1000
+code:
+  mov [rax+rdi+08],esi
+  cmp byte ptr [rbx+00091318],00
+  jmp return
+
+address:
+  jmp newmem
+  nop 6
+return:
+
+[DISABLE]
+
+address:
+  db bytes
+  // mov [rax+rdi+08],esi
+  // cmp byte ptr [rbx+00091318],00
+
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: GhostOfTsushima.exe+520C41
+
+GhostOfTsushima.exe+520C16: 48 8D 0D 73 6C 98 01     - lea rcx,[GhostOfTsushima.exe+1EA7890]
+GhostOfTsushima.exe+520C1D: E8 DE 60 06 00           - call GhostOfTsushima.exe+586D00
+GhostOfTsushima.exe+520C22: 84 C0                    - test al,al
+GhostOfTsushima.exe+520C24: 75 17                    - jne GhostOfTsushima.exe+520C3D
+GhostOfTsushima.exe+520C26: 48 8D 0D 63 6C 98 01     - lea rcx,[GhostOfTsushima.exe+1EA7890]
+GhostOfTsushima.exe+520C2D: E8 DE 60 06 00           - call GhostOfTsushima.exe+586D10
+GhostOfTsushima.exe+520C32: 84 C0                    - test al,al
+GhostOfTsushima.exe+520C34: BF 50 0C 00 00           - mov edi,00000C50
+GhostOfTsushima.exe+520C39: 49 0F 45 FF              - cmovne rdi,r15
+GhostOfTsushima.exe+520C3D: 48 8D 04 AB              - lea rax,[rbx+rbp*4]
+// ---------- INJECTING HERE ----------
+GhostOfTsushima.exe+520C41: 89 74 38 08              - mov [rax+rdi+08],esi
+// ---------- DONE INJECTING  ----------
+GhostOfTsushima.exe+520C45: 80 BB 18 13 09 00 00     - cmp byte ptr [rbx+00091318],00
+GhostOfTsushima.exe+520C4C: 74 13                    - je GhostOfTsushima.exe+520C61
+GhostOfTsushima.exe+520C4E: FF 83 20 13 09 00        - inc [rbx+00091320]
+GhostOfTsushima.exe+520C54: 80 8B 24 13 09 00 01     - or byte ptr [rbx+00091324],01
+GhostOfTsushima.exe+520C5B: FF 83 1C 13 09 00        - inc [rbx+0009131C]
+GhostOfTsushima.exe+520C61: 41 B0 01                 - mov r8b,01
+GhostOfTsushima.exe+520C64: 33 D2                    - xor edx,edx
+GhostOfTsushima.exe+520C66: 48 8B CB                 - mov rcx,rbx
+GhostOfTsushima.exe+520C69: E8 F2 91 FF FF           - call GhostOfTsushima.exe+519E60
+GhostOfTsushima.exe+520C6E: 48 8D 84 24 98 00 00 00  - lea rax,[rsp+00000098]
+}
+</AssemblerScript>
+    </CheatEntry>
+  </CheatEntries>
+  <CheatCodes>
+    <CodeEntry>
+      <Description>(共享)受到攻击，减少hp</Description>
+      <AddressString>GhostOfTsushima.exe+68B365</AddressString>
+      <Before>
+        <Byte>BA</Byte>
+        <Byte>75</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Before>
+      <Actual>
+        <Byte>F3</Byte>
+        <Byte>0F</Byte>
+        <Byte>11</Byte>
+        <Byte>89</Byte>
+        <Byte>74</Byte>
+        <Byte>19</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </Actual>
+      <After>
+        <Byte>48</Byte>
+        <Byte>8B</Byte>
+        <Byte>89</Byte>
+        <Byte>F8</Byte>
+        <Byte>16</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>访问：收藏-背囊</Description>
+      <AddressString>GhostOfTsushima.exe+90FFFA</AddressString>
+      <Before>
+        <Byte>E8</Byte>
+        <Byte>26</Byte>
+        <Byte>7F</Byte>
+        <Byte>C0</Byte>
+        <Byte>FF</Byte>
+      </Before>
+      <Actual>
+        <Byte>8B</Byte>
+        <Byte>5C</Byte>
+        <Byte>A8</Byte>
+        <Byte>08</Byte>
+      </Actual>
+      <After>
+        <Byte>EB</Byte>
+        <Byte>03</Byte>
+        <Byte>48</Byte>
+        <Byte>63</Byte>
+        <Byte>EA</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>消耗弓箭、苦无的数量</Description>
+      <AddressString>GhostOfTsushima.exe+520C41</AddressString>
+      <Before>
+        <Byte>FF</Byte>
+        <Byte>48</Byte>
+        <Byte>8D</Byte>
+        <Byte>04</Byte>
+        <Byte>AB</Byte>
+      </Before>
+      <Actual>
+        <Byte>89</Byte>
+        <Byte>74</Byte>
+        <Byte>38</Byte>
+        <Byte>08</Byte>
+      </Actual>
+      <After>
+        <Byte>80</Byte>
+        <Byte>BB</Byte>
+        <Byte>18</Byte>
+        <Byte>13</Byte>
+        <Byte>09</Byte>
+      </After>
+    </CodeEntry>
+  </CheatCodes>
+  <UserdefinedSymbols/>
+  <Comments>可以使用篝火触发伤害，找到hp指针
+</Comments>
+</CheatTable>
